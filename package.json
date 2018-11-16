@@ -1,0 +1,22 @@
+{
+  "name": "msd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "mahmoud ahmed",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "find-remove": "^1.2.2",
+    "mongoose": "^5.1.7",
+    "multer": "^1.4.1",
+    "nodemon": "^1.18.4",
+    "socket.io": "^2.1.1"
+  }
+}

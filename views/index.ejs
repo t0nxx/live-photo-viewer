@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MSD</title>
+    <meta http-equiv="refresh" content="40" />
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <meta name="description" content="Freewall demo for flex layout" />
+    <meta name="keywords" content="javascript, dynamic, grid, layout, jquery plugin, flex layouts" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/freewall.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style type="text/css">
+        body {
+            background: #d7d7d7;
+            max-width: none !important;
+        }
+
+        .free-wall {
+            margin: 15px;
+        }
+
+        .brick img {
+            margin: 0;
+            display: block;
+        }
+
+        header,
+        footer {
+            text-align: center;
+        }
+
+        header img,
+        footer img {
+            width: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="images/header.jpg" alt="">
+    </header>
+    <div id="freewall" class="free-wall">
+
+        <!-- Start Loop -->
+        <% for (var i = 0; i < photos.length; i++) { %>
+            <div class='brick'>
+                <img src='<%= photos[i].path %>' width='100%'>
+            </div>
+            <% } %>
+                <!-- End Loop -->
+
+
+    </div>
+    <footer>
+        <img src="images/footer.jpg" alt="">
+    </footer>
+
+    <script type="text/javascript">
+
+        var temp = "<div class='brick' style='width:{width}px;'><img src='uploads/{index}.jpg' width='100%'></div>";
+        var w = 1,
+            h = 1,
+            html = '',
+            limitItem = 49;
+        for (var i = 0; i < limitItem; ++i) {
+            w = 1 + 3 * Math.random() << 0;
+            html += temp.replace(/\{width\}/g, w * 150).replace("{index}", i + 1);
+        }
+        // $("#freewall").html(html);
+        function setWidth() {
+            $('.brick').each(function () {
+                w = 1 + 3 * Math.random() << 0;
+                console.log(w * 150)
+                $(this).width(w * 150)
+            })
+        }
+        setWidth()
+
+        var wall = new Freewall("#freewall");
+        wall.reset({
+            selector: '.brick',
+            animate: true,
+            cellW: 150,
+            cellH: 'auto',
+            onResize: function () {
+                wall.fitWidth();
+            }
+        });
+
+        var images = wall.container.find('.brick');
+        images.find('img').load(function () {
+            wall.fitWidth();
+        });
+
+    </script>
+    <script>
+        var socket = io();
+        socket.on('disphoto', (uploadpath) => {
+            $("#freewall").append(`<div class='brick'>
+            <img src='${uploadpath}' width='100%'>
+            </div>`);
+            location.reload();
+            console.log(uploadpath);
+        })
+    </script>
+</body>
+
+</html>
